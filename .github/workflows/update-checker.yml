@@ -30,7 +30,7 @@ jobs:
     - name: Get Commit Hash
       id: getHash
       run: |
-        git clone --branch $REPO_BRANCH --single-branch --filter=blob:none --depth=1 $REPO_URL
+        git clone --branch $REPO_BRANCH --single-branch --filter=blob:none --depth 1 $REPO_URL
         echo "commitHash=$(git rev-parse HEAD)" >> $GITHUB_OUTPUT
 
     - name: Compare Commit Hash
