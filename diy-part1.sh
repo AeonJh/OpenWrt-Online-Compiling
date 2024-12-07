@@ -15,6 +15,9 @@
 
 # Add a feed source
 echo 'src-git helloworld https://github.com/fw876/helloworld' >>feeds.conf.default
-echo 'src-git autotimeset https://github.com/sirpdboy/luci-app-autotimeset' >>feeds.conf.default
-echo 'src-git modem https://github.com/Siriling/5G-Modem-Support/tree/main/luci-app-modem' >>feeds.conf.default
+git clone https://github.com/sirpdboy/luci-app-autotimeset package/luci-app-autotimeset
+echo 'src-git 5g_modem_support https://github.com/Siriling/5G-Modem-Support' >>feeds.conf.default
+./scripts/feeds update 5g_modem_support
+./scripts/feeds install luci-app-modem
+sed -i '/src-git 5g_modem_support https:\/\/github.com\/Siriling\/5G-Modem-Support/d;/^$/d' feeds.conf.default
 #echo 'src-git passwall https://github.com/xiaorouji/openwrt-passwall' >>feeds.conf.default
