@@ -20,6 +20,7 @@ env:
   REPO_URL: https://github.com/immortalwrt/immortalwrt
   REPO_BRANCH: v24.10.0-rc1
   FEEDS_CONF: feeds.conf.default
+  WORK_DIR: /mnt/workdir
   CONFIG_FILE: .config
   DIY_P1_SH: diy-part1.sh
   DIY_P2_SH: diy-part2.sh
@@ -35,12 +36,12 @@ jobs:
     steps:
     - name: Free Disk Space
       run: |
-        df -h
-        lsblk
         sudo rm -rf /usr/share/dotnet
         sudo rm -rf /opt/ghc
         sudo rm -rf "/usr/local/share/boost"
         sudo rm -rf "$AGENT_TOOLSDIRECTORY"
+        df -hT
+        lsblk
 
     - name: Checkout
       uses: actions/checkout@main
@@ -56,15 +57,15 @@ jobs:
         sudo -E apt-get -qq autoremove --purge
         sudo -E apt-get -qq clean
         sudo timedatectl set-timezone "$TZ"
-        sudo mkdir -p /workdir
+        sudo mkdir -p $WORK_DIR
         sudo chown $USER:$GROUPS /workdir
 
     - name: Clone source code
-      working-directory: /workdir
+      working-directory: $WORK_DIR
       run: |
         df -hT $PWD
         git clone $REPO_URL -b $REPO_BRANCH openwrt
-        ln -sf /workdir/openwrt $GITHUB_WORKSPACE/openwrt
+        ln -sf $WORK_DIR/openwrt $GITHUB_WORKSPACE/openwrt
 
     - name: Load custom feeds
       run: |
