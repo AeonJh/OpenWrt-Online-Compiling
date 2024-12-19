@@ -27,7 +27,7 @@ on:
       USE_NX30PRO_EEPROM:
         description: 'Use nx30pro eeprom'
         required: true
-        default: true
+        default: false
         type: boolean
 
 env:
@@ -39,7 +39,7 @@ env:
   ENV_SH: scripts/env.sh
   DIY_SH: scripts/diy.sh
   UPLOAD_BIN_DIR: false
-  UPLOAD_FIRMWARE: false
+  UPLOAD_FIRMWARE: true
   UPLOAD_RELEASE: true
   TZ: Asia/Shanghai
 
