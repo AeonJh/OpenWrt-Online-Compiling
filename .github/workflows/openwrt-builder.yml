@@ -31,7 +31,9 @@ on:
         type: boolean
 
 env:
-  REPO_URL: https://github.com/hanwckf/immortalwrt-mt798x
+  REPO_URL: https://github.com/immortalwrt/immortalwrt
+  REPO_BRANCH: v23.05.4
+  FEEDS_CONF: feeds.conf.default
   FREE_DISK_SH: scripts/free_disk_space.sh
   CONFIG_FILE: configs/.rax3000m-emmc-config
   ENV_SH: scripts/env.sh
@@ -69,8 +71,9 @@ jobs:
         git clone $REPO_URL -b $REPO_BRANCH openwrt
         ln -sf /mnt/workdir/openwrt $GITHUB_WORKSPACE/openwrt
 
-    - name: Load custom scripts
+    - name: Load feeds & custom scripts
       run: |
+        [ -e $FEEDS_CONF ] && mv $FEEDS_CONF openwrt/feeds.conf.default
         chmod +x $GITHUB_WORKSPACE/$DIY_SH && $GITHUB_WORKSPACE/$DIY_SH
 
     - name: Update feeds
