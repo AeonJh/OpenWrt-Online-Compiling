@@ -38,7 +38,7 @@ env:
   CONFIG_FILE: configs/.rax3000m-emmc-config
   ENV_SH: scripts/env.sh
   DIY_SH: scripts/diy.sh
-  UPLOAD_BIN_DIR: false
+  UPLOAD_BIN_DIR: true
   UPLOAD_FIRMWARE: true
   UPLOAD_RELEASE: true
   TZ: Asia/Shanghai
