@@ -10,7 +10,7 @@
 # See /LICENSE for more information.
 #
 
-name: RAX3000M Immortalwrt OpenWrt Builder
+name: RAX3000M Immortalwrt 23.05 OpenWrt Builder
 
 permissions: write-all
 # Enable write permission to prevent failure to upload to release
@@ -18,24 +18,13 @@ permissions: write-all
 on:
   repository_dispatch:
   workflow_dispatch:
-    inputs:
-      USE_MTWIFI_CFG:
-        description: 'Use mediatek-wifi-cfg'
-        required: true
-        default: false
-        type: boolean
-      USE_NX30PRO_EEPROM:
-        description: 'Use nx30pro eeprom'
-        required: true
-        default: false
-        type: boolean
 
 env:
   REPO_URL: https://github.com/padavanonly/immortalwrt-mt798x-23.05
   REPO_BRANCH: openwrt-23.05
   FEEDS_CONF: feeds.conf.default
   FREE_DISK_SH: scripts/free_disk_space.sh
-  CONFIG_FILE: configs/.rax3000m-emmc-config
+  CONFIG_FILE: configs/config-237-immortalwrt-v23.05-rax3000m-emmc
   ENV_SH: scripts/env.sh
   DIY_SH: scripts/diy.sh
   UPLOAD_BIN_DIR: true
@@ -86,19 +75,6 @@ jobs:
       run: |
         [ -e files ] && mv files openwrt/files
         [ -e $CONFIG_FILE ] && mv $CONFIG_FILE openwrt/.config
-
-    - name: Sets the wireless control interface style
-      if: env.USE_MTWIFI_CFG == 'true'
-      run: |
-        sed -i '/CONFIG_PACKAGE_luci-app-mtk=y/{N;N;N;s/CONFIG_PACKAGE_luci-app-mtk=y\nCONFIG_PACKAGE_luci-i18n-mtk-zh-cn=y\nCONFIG_PACKAGE_wifi-profile=y\nCONFIG_WIFI_NORMAL_SETTING=y/CONFIG_PACKAGE_lua-cjson=y\nCONFIG_PACKAGE_luci-app-mtwifi-cfg=y\nCONFIG_PACKAGE_luci-i18n-mtwifi-cfg-zh-cn=y\nCONFIG_PACKAGE_mtwifi-cfg=y/}' openwrt/.config
-
-    - name: Set whether to use the nx30pro eeprom
-      if: env.USE_NX30PRO_EEPROM == 'true'
-      run: |
-        mkdir openwrt/target/linux/mediatek/filogic/base-files/lib/firmware
-        cp eeprom/nx30pro_eeprom.bin openwrt/target/linux/mediatek/filogic/base-files/lib/firmware/MT7981_iPAiLNA_EEPROM.bin
-        sed -i 's/caldata_extract_mmc/# caldata_extract_mmc/' openwrt/target/linux/mediatek/filogic/base-files/lib/preinit/90_extract_caldata
-        sed -i 's#./files/mt7981-default-eeprom/MT7981_iPAiLNA_EEPROM.bin##' openwrt/package/mtk/drivers/mt_wifi/Makefile
 
     - name: Download package
       id: package
@@ -155,23 +131,7 @@ jobs:
       if: env.UPLOAD_RELEASE == 'true' && steps.compile.outputs.status == 'success' && !cancelled()
       run: |
         echo -e "### immortalwrt-mt7981-cmcc_rax3000m-emmc" >> release.txt
-        wlan_luci_interface=""
-        if grep -q 'CONFIG_PACKAGE_mtwifi-cfg=y' openwrt/.config; then
-          echo "- 使用 OpenWrt 原生无线控制界面" >> release.txt
-          wlan_luci_interface="mtwifi-cfg"
-        else
-          echo "- 使用 MTK SDK 无线控制界面" >> release.txt
-          wlan_luci_interface="luci-app-mtk"
-        fi
-        eeprom_status=""
-        if [ -e openwrt/target/linux/mediatek/mt7981/base-files/lib/firmware/MT7981_iPAiLNA_EEPROM.bin ] ; then
-          echo "- eeprom 使用 H3C NX30 Pro 提取版本" >> release.txt
-          eeprom_status="nx30pro_eeprom"
-        else
-          echo "- eeprom 未修改" >> release.txt
-          eeprom_status="default_eeprom"
-        fi
-        release_tag=$(date +"%Y.%m.%d-mt7981-cmcc_rax3000m-emmc-${wlan_luci_interface}-${eeprom_status}")
+        release_tag=$(date +"%Y.%m.%d-mt7981-cmcc_rax3000m-emmc")
         echo "release_tag=${release_tag}" >> $GITHUB_OUTPUT
         echo "status=success" >> $GITHUB_OUTPUT
 

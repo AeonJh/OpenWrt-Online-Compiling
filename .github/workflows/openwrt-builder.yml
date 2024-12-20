@@ -10,7 +10,7 @@
 # See /LICENSE for more information.
 #
 
-name: RAX3000M Immortalwrt OpenWrt Builder
+name: RAX3000M Immortalwrt 24.10.0-rc1 OpenWrt Builder
 
 permissions: write-all
 # Enable write permission to prevent failure to upload to release
@@ -35,7 +35,7 @@ env:
   REPO_BRANCH: v24.10.0-rc1
   FEEDS_CONF: feeds.conf.default
   FREE_DISK_SH: scripts/free_disk_space.sh
-  CONFIG_FILE: configs/.rax3000m-emmc-config
+  CONFIG_FILE: configs/config-immortalwrt-v24.10.0-rc1-rax3000m-emmc
   ENV_SH: scripts/env.sh
   DIY_SH: scripts/diy.sh
   UPLOAD_BIN_DIR: true
