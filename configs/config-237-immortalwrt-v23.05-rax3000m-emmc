@@ -5355,7 +5355,7 @@ CONFIG_PACKAGE_datconf-lua=y
 CONFIG_PACKAGE_miniupnpd-mtk-adjust-nftables=y
 CONFIG_PACKAGE_mtk-smp=y
 # CONFIG_PACKAGE_mtkhqos_util is not set
-CONFIG_PACKAGE_mtwifi-cfg=y
+# CONFIG_PACKAGE_mtwifi-cfg is not set
 # CONFIG_PACKAGE_regs is not set
 # CONFIG_PACKAGE_switch is not set
 # end of Applications
